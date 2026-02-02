@@ -1,5 +1,7 @@
 # LiveRescue
 
+> **🚧 Early Development:** This library is a work in progress and not yet recommended for production use. APIs may change, and there are known limitations (see TODOs below).
+
 **UX Protection from Developer Oopsies in Phoenix LiveView**
 
 `LiveRescue` protects your users from seeing crashes caused by unexpected bugs in your code. It wraps LiveView and LiveComponent lifecycle callbacks in `try/rescue` blocks, so when something goes wrong, users see a graceful fallback instead of the "Red Screen of Death" or a jarring page reload.
