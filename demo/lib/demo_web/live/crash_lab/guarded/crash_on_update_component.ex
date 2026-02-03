@@ -19,7 +19,9 @@ defmodule DemoWeb.CrashLab.Guarded.CrashOnUpdateComponent do
         <div class="flex items-center justify-between">
           <div>
             <p class="font-medium">Current Value: {@value}</p>
-            <p class="text-xs text-base-content/60">Crashes when value > 3 (shows flash, keeps state)</p>
+            <p class="text-xs text-base-content/60">
+              Crashes when value > 3 (shows flash, keeps state)
+            </p>
           </div>
           <div
             class="radial-progress text-success"
