@@ -8,6 +8,8 @@
 
 **This is not an error handling library.** LiveRescue is a safety net for the bugs that slip through testing. Every error it catches should be treated as a bug to fix, not an expected condition to handle. The library logs all rescued exceptions with full stacktraces so you can find and fix them.
 
+> **📚 Recommended Reading:** For proper error and exception handling patterns in LiveView, refer to the [official Phoenix LiveView documentation](https://hexdocs.pm/phoenix_live_view/error-handling.html).
+
 > **⚠️ Architectural Warning:** This library overrides the standard "Let it Crash" philosophy of the BEAM. Please read the "Risks & Trade-offs" section below before using this in production.
 
 ## Installation
