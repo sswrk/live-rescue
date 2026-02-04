@@ -152,14 +152,8 @@ defmodule LiveRescue do
     render_error(assigns)
   end
 
-  def handle_crash(:handle_event, e, stacktrace, socket) do
-    log_error("handle_event", e, stacktrace)
-    notify_error()
-    {:noreply, socket}
-  end
-
   def handle_crash(callback, e, stacktrace, socket)
-      when callback in [:handle_info, :handle_params] do
+      when callback in [:handle_event, :handle_info, :handle_params] do
     log_error(Atom.to_string(callback), e, stacktrace)
     notify_error()
     {:noreply, socket}
