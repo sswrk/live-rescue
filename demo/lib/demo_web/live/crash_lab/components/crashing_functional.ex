@@ -20,6 +20,32 @@ defmodule DemoWeb.CrashLab.CrashingFunctional do
     """
   end
 
+  attr :count, :integer, required: true
+
+  def counter_display(assigns) do
+    ~H"""
+    <div class="p-3 bg-primary/10 rounded-lg flex items-center gap-3">
+      <span class="text-3xl font-bold text-primary">{@count}</span>
+      <span class="text-sm text-base-content/60">clicks</span>
+    </div>
+    """
+  end
+
+  attr :count, :integer, required: true
+
+  def crash_above_threshold(assigns) do
+    if assigns.count > 5 do
+      raise "Simulated crash: count #{assigns.count} exceeded threshold of 5"
+    end
+
+    ~H"""
+    <div class="p-3 bg-warning/10 rounded-lg flex items-center gap-3">
+      <span class="text-3xl font-bold text-warning">{@count}</span>
+      <span class="text-sm text-base-content/60">clicks (crashes above 5)</span>
+    </div>
+    """
+  end
+
   def nested_crash(assigns) do
     ~H"""
     <div class="p-3 bg-base-200 rounded-lg space-y-2">

@@ -16,12 +16,21 @@ defmodule DemoWeb.CrashLab.Guarded.RenderGuardLive do
     {:ok,
      socket
      |> assign(:page_title, "Render Guard Tests")
-     |> assign(:show_crashing_component, false)}
+     |> assign(:show_crashing_component, false)
+     |> assign(:counter, 0)}
   end
 
   @impl true
   def handle_event("toggle_crashing_component", _params, socket) do
     {:noreply, assign(socket, :show_crashing_component, !socket.assigns.show_crashing_component)}
+  end
+
+  def handle_event("increment", _params, socket) do
+    {:noreply, assign(socket, :counter, socket.assigns.counter + 1)}
+  end
+
+  def handle_event("reset_counter", _params, socket) do
+    {:noreply, assign(socket, :counter, 0)}
   end
 
   @impl true
@@ -90,6 +99,60 @@ defmodule DemoWeb.CrashLab.Guarded.RenderGuardLive do
                   <.crash_on_render />
                 </.eager_error_boundary>
               <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%!-- Reactivity Section --%>
+      <div class="card bg-base-100 shadow-sm border border-base-200">
+        <div class="card-body">
+          <h2 class="card-title text-lg flex items-center gap-2">
+            <.icon name="hero-arrow-path" class="size-5 text-primary" />
+            Reactivity Inside the Boundary
+          </h2>
+          <p class="text-sm text-base-content/60 mb-4">
+            Components inside <code>&lt;.eager_error_boundary&gt;</code> still re-render
+            correctly when assigns change. The only difference is that every render sends
+            a full update instead of a minimal diff.
+          </p>
+
+          <div class="flex items-center gap-4 mb-4">
+            <button phx-click="increment" class="btn btn-primary btn-sm">
+              <.icon name="hero-plus" class="size-4" /> Increment
+            </button>
+            <button phx-click="reset_counter" class="btn btn-ghost btn-sm">
+              Reset
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+              <h3 class="font-semibold">Outside boundary</h3>
+              <p class="text-sm text-base-content/60">
+                Normal rendering with change tracking.
+              </p>
+              <.counter_display count={@counter} />
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="font-semibold">Inside boundary</h3>
+              <p class="text-sm text-base-content/60">
+                Same component, same result, no change tracking.
+              </p>
+              <.eager_error_boundary>
+                <.counter_display count={@counter} />
+              </.eager_error_boundary>
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="font-semibold">Crashes above 5</h3>
+              <p class="text-sm text-base-content/60">
+                Works until count > 5, then shows error UI. Reset to recover.
+              </p>
+              <.eager_error_boundary>
+                <.crash_above_threshold count={@counter} />
+              </.eager_error_boundary>
             </div>
           </div>
         </div>
