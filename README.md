@@ -101,15 +101,20 @@ LiveRescue wraps the following callbacks and handles crashes differently dependi
 
 | Callback | Applies to | On crash |
 |----------|------------|----------|
-| `mount/3` | LiveView | Renders error UI instead of the component |
+| `mount/3` | LiveView | Renders error UI instead of the view |
 | `mount/1` | LiveComponent | Renders error UI instead of the component |
 | `update/2` | LiveComponent | Shows flash message, keeps previous state |
-| `render/1` | Both | Renders error UI |
 | `handle_event/3` | Both | Shows flash message |
 | `handle_info/2` | LiveView | Shows flash message |
 | `handle_params/3` | LiveView | Shows flash message |
 
 All crashes are logged with full stacktraces.
+
+### Why `render/1` is not guarded
+
+LiveRescue does **not** wrap the `render` callback with `try/rescue`. Phoenix LiveView's HEEx templates compile to `%Phoenix.LiveView.Rendered{}` structs containing lazy closures for dynamic content. These closures — including calls to functional components — are evaluated during LiveView's diff traversal, **after** the `render` function has already returned. A `try/rescue` around `render` cannot catch errors that occur in these deferred closures.
+
+Eagerly evaluating the rendered struct to work around this would break LiveView's change tracking (diffing), which is not an acceptable tradeoff for a general-purpose library.
 
 ## Configuration
 

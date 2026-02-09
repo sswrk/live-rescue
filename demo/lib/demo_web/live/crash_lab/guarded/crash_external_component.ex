@@ -14,8 +14,7 @@ defmodule DemoWeb.CrashLab.Guarded.CrashExternalComponent do
           <div>
             <h3 class="font-semibold text-warning-content">External Component</h3>
             <p class="text-xs text-base-content/60">
-              This component does NOT use LiveRescue internally.
-              <br />
+              This component does NOT use LiveRescue internally. <br />
               It will be protected by the parent wrapper.
             </p>
           </div>
