@@ -136,6 +136,12 @@ defmodule LiveRescue.ComponentGuard do
           def handle_event(event, params, socket),
             do: unquote(inner).handle_event(event, params, socket)
         end
+
+        # Always delegate render (not in @guarded_callbacks, just a passthrough)
+        if function_exported?(unquote(inner), :render, 1) do
+          @impl true
+          def render(assigns), do: unquote(inner).render(assigns)
+        end
       end
 
     Module.create(wrapper_name, contents, file: "live_rescue/guarded", line: 1)
